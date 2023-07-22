@@ -2,38 +2,54 @@ import React, { useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from '@ant-design/icons';
+import { AiOutlineDashboard, AiOutlineShoppingCart } from "react-icons/ai"
 import { Layout, Menu, Button, theme } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
-
 const MainLayout = () => {
-    const [collapsed, setCollapsed] = useState(false); 
-    return (
-        <Layout>
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+  const navigate = useNavigate();
+  return (
+    <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={['']}
+          onClick= {({ key }) => {
+            if (key == 'signout') {
+
+            } else {
+              navigate(key);
+            }
+          }}
           items={[
             {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
+              key: '',
+              icon: <AiOutlineDashboard />,
+              label: 'Dashboard',
             },
             {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
+              key: 'customers',
+              icon: <AiOutlineDashboard />,
+              label: 'Customers',
             },
             {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
+              key: 'Catalog', // Note the Capitalization
+              icon: <AiOutlineDashboard />,
+              label: 'Catalog',
+              children: [
+                {
+                  key: 'product',
+                  icon: <AiOutlineShoppingCart />,
+                  label: 'Add Product',
+                },
+              ]
             },
           ]}
         />
@@ -69,6 +85,5 @@ const MainLayout = () => {
       </Layout>
     </Layout>
   );
-}
-
-export default MainLayout
+};
+export default MainLayout;
