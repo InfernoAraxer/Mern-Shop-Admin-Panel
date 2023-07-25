@@ -3,8 +3,11 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link } from 'react-router-dom';
 import { AiOutlineBgColors, AiOutlineDashboard, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai"
+import { RiCouponLine } from "react-icons/ri"
 import { Outlet } from 'react-router-dom';
 import { SiBrandfolder } from "react-icons/si"
 import { BiCategoryAlt } from "react-icons/bi"
@@ -98,9 +101,26 @@ const MainLayout = () => {
               ]
             },
             {
-              key: 'orders',
+              key: 'order-list',
               icon: <FaClipboardList className='fs-4' />,
               label: 'Orders',
+            },
+            {
+              key: 'marketing',
+              icon: <RiCouponLine className='fs-4' />,
+              label: 'Marketing',
+              children: [
+                {
+                  key: 'add-coupon',
+                  icon: <ImBlog className='fs-4' />,
+                  label: 'Add Coupon',
+                },
+                {
+                  key: 'coupon-list',
+                  icon: <RiCouponLine className='fs-4' />,
+                  label: 'Coupon List',
+                },
+              ]
             },
             {
               key: 'blogs',
@@ -183,6 +203,17 @@ const MainLayout = () => {
             background: colorBgContainer,
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={250}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            theme="light"
+          />
           <Outlet/>
         </Content>
       </Layout>
