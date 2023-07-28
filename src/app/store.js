@@ -1,4 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+    configureStore, 
+  } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice'
 import customerReducer from '../features/customers/customerSlice'
 import productReducer from '../features/product/productSlice'
@@ -25,4 +27,8 @@ export const store = configureStore({
         upload: uploadReducer,
         coupon: couponReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });

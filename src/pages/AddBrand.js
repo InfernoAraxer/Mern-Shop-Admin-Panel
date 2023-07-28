@@ -15,9 +15,10 @@ const AddBrand = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const getBrandId = location.pathname.split("/")[3]; 
   const newBrand = useSelector((state) => state.brand);
   const { isSuccess, isError, isLoading, createdBrand, brandName, updatedBrand } = newBrand;
-  const getBrandId = location.pathname.split("/")[3]; 
+
   useEffect(() => {
     if (getBrandId !== undefined) {
       dispatch(getABrand(getBrandId));
@@ -49,6 +50,7 @@ const AddBrand = () => {
       if(getBrandId !== undefined) {
         const data = {id: getBrandId, brandData: values};
         dispatch(updateABrand(data));
+        dispatch(resetState());
       } else {
         dispatch(createBrand(values));
         formik.resetForm();

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBlogs } from '../features/blog/blogSlice';
+import { getBlogs, deleteABlog, resetState } from '../features/blog/blogSlice';
 import { Link } from 'react-router-dom';
 import { BiEdit } from 'react-icons/bi'
 import { AiFillDelete } from 'react-icons/ai'
+import CustomModal from '../components/CustomModal';
 
 const columns= [
     {
@@ -27,8 +28,18 @@ const columns= [
   ];
 
 const BlogList = () => {
+  const [open, setOpen] = useState(false);
+  const [blogId, setBlogId] = useState("");
+  const showModal = (e) => {
+    setOpen(true);
+    setBlogId(e);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getBlogs());
   }, []);
   const blogState = useSelector((state) => state.blog.blogs)
@@ -40,15 +51,24 @@ const BlogList = () => {
       category: blogState[i].category,
       action: (
         <>
-          <Link className='fs-3 text-danger' to='/' >
+          <Link className='fs-3 text-danger' to={`/admin/edit-blog/${blogState[i]._id}`} >
             <BiEdit/>
           </Link> 
-          <Link className="ms-3 fs-3 text-danger" to='/' >
+          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => showModal(blogState[i]._id)} to='/' >
             <AiFillDelete/>
-          </Link>
+          </button>
         </>
       )
     });
+  }
+
+  const deleteBlog = (e) => {
+    dispatch(deleteABlog(e));
+    // console.log(e);
+    setOpen(false);
+    setTimeout(() => {
+      dispatch(getBlogs());    
+    }, 100)
   }
 
   return (
@@ -57,6 +77,7 @@ const BlogList = () => {
       <div>
           <Table columns={columns} dataSource={data} />
         </div>
+      <CustomModal hideModal={hideModal} open={open} performAction={() => {deleteBlog(blogId)}} title="Are you sure you want to delete this blog?" />
     </div>
   )
 }

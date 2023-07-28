@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBlogCategories } from '../features/blogCategory/blogCategorySlice';
+import { getBlogCategories, deleteABlogCategory, resetState } from '../features/blogCategory/blogCategorySlice';
 import { Link } from 'react-router-dom';
 import { BiEdit } from 'react-icons/bi'
 import { AiFillDelete } from 'react-icons/ai'
+import CustomModal from '../components/CustomModal';
 
 const columns= [
   {
@@ -23,12 +24,20 @@ const columns= [
 ];
 
 const BlogCategoryList = () => {
+  const [open, setOpen] = useState(false);
+  const [couponId, setBlogCategoryId] = useState("");
+  const showModal = (e) => {
+    setOpen(true);
+    setBlogCategoryId(e);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
   const dispatch = useDispatch();
   useEffect (() => {
     dispatch(getBlogCategories());
   }, []);
   const blogCategoryState = useSelector((state) => state.blogCategory.blogCategories);
-  // console.log(blogCategoryState);
   const data = [];
   for (let i = 0; i < blogCategoryState.length; i++) {
     data.push({
@@ -36,15 +45,23 @@ const BlogCategoryList = () => {
       title: blogCategoryState[i].title,
       action: (
         <>
-          <Link className='fs-3 text-danger' to='/' >
+          <Link className='fs-3 text-danger' to={`/admin/edit-blog-category/${blogCategoryState[i]._id}`} >
             <BiEdit/>
           </Link> 
-          <Link className="ms-3 fs-3 text-danger" to='/' >
+          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => showModal(blogCategoryState[i]._id)} to='/' >
             <AiFillDelete/>
-          </Link>
+          </button>
         </>
       )
     });
+  }
+
+  const deleteBlogCategory = (e) => {
+    dispatch(deleteABlogCategory(e));
+    setOpen(false);
+    setTimeout(() => {
+      dispatch(getBlogCategories());    
+    }, 100)
   }
 
   return (
@@ -53,6 +70,7 @@ const BlogCategoryList = () => {
       <div>
           <Table columns={columns} dataSource={data} />
         </div>
+      <CustomModal hideModal={hideModal} open={open} performAction={() => {deleteBlogCategory(couponId)}} title="Are you sure you want to delete this blog category?" />
     </div>
   )
 }

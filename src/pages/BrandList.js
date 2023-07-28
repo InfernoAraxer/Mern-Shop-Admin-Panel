@@ -22,8 +22,6 @@ const columns= [
       dataIndex: 'action',
     },
   ];
-  
-
 
 const BrandList = () => {
   const [open, setOpen] = useState(false);
@@ -37,7 +35,6 @@ const BrandList = () => {
   };
   const dispatch = useDispatch();
   useEffect (() => {
-    dispatch(resetState())
     dispatch(getBrands());
   }, []);
   const brandState = useSelector((state) => state.brand.brands);
@@ -58,6 +55,7 @@ const BrandList = () => {
       )
     });
   }
+
   const deleteBrand = (e) => {
     dispatch(deleteABrand(e));
     setOpen(false);
@@ -65,13 +63,14 @@ const BrandList = () => {
       dispatch(getBrands());    
     }, 100)
   }
+  
   return (
     <div>
       <h3 className='mb-4 title'>Brands List</h3>
       <div>
           <Table columns={columns} dataSource={data} />
       </div>
-      <CustomModal hideModal={hideModal} open={open} performAction={() => {deleteBrand(brandId)}} title="Are you sure you want to delete this bran?" />
+      <CustomModal hideModal={hideModal} open={open} performAction={() => {deleteBrand(brandId)}} title="Are you sure you want to delete this color?" />
     </div>
   )
 }
