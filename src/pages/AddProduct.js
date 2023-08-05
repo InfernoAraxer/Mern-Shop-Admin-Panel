@@ -84,12 +84,14 @@ const AddProduct = () => {
     },
     validationSchema: schema,
     onSubmit: values => {
-
       dispatch(createProducts(values));
       formik.resetForm();
       setColor(null);
       setTimeout(() => {
         dispatch(resetState());
+        dispatch(getBrands());
+        dispatch(getProductCategories());
+        dispatch(getColors());
       }, 3000)
     },
   });

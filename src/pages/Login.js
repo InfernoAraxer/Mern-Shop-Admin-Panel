@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import CustomInput from '../components/CustomInput'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/auth/authSlice';
+import { getMonthlyData, getOrders, getYearlyData } from '../features/auth/authSlice';
+
 // Sets Validity of Login Parameters
 let schema = yup.object().shape({
   email: yup.string().email("Email should be valid").required("Email is required"),
@@ -33,11 +35,14 @@ const Login = () => {
   // Begins Navigation/Execution 
   useEffect(() => {
     if (isSuccess) {
-      navigate("admin");
+      window.location.reload();
+      setTimeout(() => {
+        navigate("admin");
+      }, 300);
     } else {
       navigate("");
     }
-  }, [user, isError, isSuccess, isLoading])
+  }, [user, isError, isSuccess, isLoading]); 
   return (
     <div className='py-5' style={{ background: "#ffd333", minHeight: "100vh" }}>
       <br/>
@@ -53,22 +58,22 @@ const Login = () => {
         </div>
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput type="text" name="email" label="Email Address" val={formik.values.email} id="email" onChng={formik.handleChange('email')} onBlr={formik.handleBlur('email')}/>
-          <div className='error'>
+          <div className='error mt-2'>
             {formik.touched.email && formik.errors.email ? (
               <div>{formik.errors.email}</div>
             ) : null}
           </div>
           <CustomInput type="password" name="password" label="Password" val={formik.values.password} id="pass" onChng={formik.handleChange('password')} onBlr={formik.handleBlur('password')} />
-          <div className='error'>
+          <div className='error mt-2 mb-2'>
             {formik.touched.password && formik.errors.password ? (
               <div>{formik.errors.password}</div>
             ) : null}
           </div>
-          <div className="mb-3 text-end">
+          {/* <div className="mb-3 text-end">
             <Link to="forgot-password" className="">
               Forgot Password?
             </Link>
-          </div>
+          </div> */}
           <button className="border-0 px-3 py-2 text-white fw-bold w-100 text-center text-decoration-none fs-5" style={{ background: "#ffd333"}} type="submit">
             Login
           </button>

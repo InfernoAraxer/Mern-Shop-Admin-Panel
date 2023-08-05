@@ -6,7 +6,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from 'react-router-dom';
-import { AiOutlineBgColors, AiOutlineDashboard, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai"
+import { AiOutlineBgColors, AiOutlineDashboard, AiOutlineLogout, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai"
 import { RiCouponLine } from "react-icons/ri"
 import { Outlet } from 'react-router-dom';
 import { SiBrandfolder } from "react-icons/si"
@@ -37,7 +37,8 @@ const MainLayout = () => {
           defaultSelectedKeys={['']}
           onClick= {({ key }) => {
             if (key == 'signout') {
-
+              localStorage.clear();
+              window.location.reload();
             } else {
               navigate(key);
             }
@@ -153,6 +154,11 @@ const MainLayout = () => {
               key: 'enquiries',
               icon: <FaClipboardList className='fs-4' />,
               label: 'Enquiries',
+            },
+            {
+              key: 'signout',
+              icon: <AiOutlineLogout className='fs-4' />,
+              label: 'Sign Out',
             },
           ]}
         />
